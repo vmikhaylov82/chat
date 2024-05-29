@@ -1,15 +1,14 @@
 <?php
 
 set_time_limit(0);
-//ini_set('display_errors', '1');
-//ini_set('display_startup_errors', '1');
-//error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
 date_default_timezone_set('Asia/Vladivostok');
 
 require_once __DIR__.'/assets/libs/sms.ru.php';
 
-//$link = mysqli_connect("localhost", "root", "root");
-$link = mysqli_connect("localhost", "vladimir", "vulkanroyal");
+$link = mysqli_connect("localhost", "vladimir", "royal");
 if ($link == false){
 	print("Ошибка: Невозможно подключиться к MySQL " . mysqli_connect_error());
 	exit;
@@ -59,7 +58,7 @@ if (isset($_POST['type']) && $_POST['type'] == 'request') {
 		//СОЗДАНИЕ CONVERSATION
 		$chat_id = isset($_POST['authorized']) ? $_POST['chat_id'] : "";
 		
-		$site_id = !isset($_POST['site_id']) ? "vulkan" : $_POST['site_id'];
+		$site_id = !isset($_POST['site_id']) ? "v" : $_POST['site_id'];
 		$sql = "INSERT INTO conversations (theme, ip, chat_id, site_id) VALUES ('".$theme."', '".$_POST['user']."', '".$chat_id."', '".$site_id."')";
 		//print $sql."<br>";
 		$result = mysqli_query($link, $sql);
@@ -117,20 +116,8 @@ if (isset($_POST['type']) && $_POST['type'] == 'request') {
 				$data = new stdClass();
 	
 				$data->to = $phone;
-				//file_put_contents(__DIR__."/sms.log", "Отправка на номер ".$phone." (".date("d.m.Y H:i").")".PHP_EOL, FILE_APPEND);
 				$data->text = "Получено сообщение в чат.";
 				$sms = $smsru->send_one($data); 
-					
-				/*
-				if ($sms->status == "OK") {
-					file_put_contents(__DIR__."/sms.log", "Успешно отправлено на номер ".$phone." (".date("d.m.Y H:i").")".PHP_EOL, FILE_APPEND);
-				} else {
-					file_put_contents(__DIR__."/sms.log", "Не отправлено на номер ".$phone.", ".$sms->status_code.", ".$sms->status_text." (".date("d.m.Y H:i").")".PHP_EOL, FILE_APPEND);
-				}
-				*/
-				
-			} else {
-				//file_put_contents(__DIR__."/sms.log", "Оператор не определен (".date("d.m.Y H:i").")".PHP_EOL, FILE_APPEND);
 			}			
 		
 		} else {
@@ -146,8 +133,6 @@ if (isset($_POST['type']) && $_POST['type'] == 'request') {
 			$data->to = "79143215166";
 			$data->text = "Получено сообщение в чат.";
 			$sms = $smsru->send_one($data); 
-			
-			//file_put_contents(__DIR__."/sms.log", "Активных операторов нет. Отправка на номер ".$data->to." (".date("d.m.Y H:i").")".PHP_EOL, FILE_APPEND);
 		}
 			
 	} else {
@@ -183,18 +168,7 @@ if (isset($_POST['type']) && $_POST['type'] == 'request') {
 			//file_put_contents(__DIR__."/sms.log", "Отправка на номер ".$phone." (".date("d.m.Y H:i").")".PHP_EOL, FILE_APPEND);
 			$data->text = "Получено сообщение в чат.";
 			$sms = $smsru->send_one($data); 
-			
-			/*
-			if ($sms->status == "OK") {
-				file_put_contents(__DIR__."/sms.log", "Успешно отправлено на номер ".$phone." (".date("d.m.Y H:i").")".PHP_EOL, FILE_APPEND);
-			} else {
-				file_put_contents(__DIR__."/sms.log", "Не отправлено на номер ".$phone.", ".$sms->status_code.", ".$sms->status_text." (".date("d.m.Y H:i").")".PHP_EOL, FILE_APPEND);
-			}
-			*/
-		
-		} else {
-			//file_put_contents(__DIR__."/sms.log", "Оператор не определен (".date("d.m.Y H:i").")".PHP_EOL, FILE_APPEND);
-		}
+		} 
 	}
 	
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -253,7 +227,6 @@ if (isset($_POST['type']) && $_POST['type'] == 'request') {
 	$res = Array();
 	while ($row = mysqli_fetch_array($result)) {
 		$res[] = array("id" => $row['id'], "theme" => $row['theme'], "ts" => $row['ts']);
-		// $res[] = array("id" => $row['id'], "theme" => urlencode($row['theme']), "ts" => $row['ts']);
 	}
 	
 	print json_encode($res, JSON_UNESCAPED_UNICODE);
@@ -300,8 +273,6 @@ if (isset($_POST['type']) && $_POST['type'] == 'request') {
 
 } else if (isset($_POST['type']) && $_POST['type'] == 'upload') {
 	
-	//file_put_contents(__DIR__.'/output.log', print_r($_FILES, true).PHP_EOL, FILE_APPEND);
-		
 	switch ($_FILES['file']['type']) {
 		case 'image/jpeg':
 			$type = ".jpeg";
@@ -320,6 +291,6 @@ if (isset($_POST['type']) && $_POST['type'] == 'request') {
 	$newFile = substr(hash('sha256', rand(111111, 999999)), 0, 32);
 	
 	if (move_uploaded_file($_FILES['file']['tmp_name'], __DIR__."/assets/upload/".$newFile.$type)) {
-		print json_encode(array('status' => 'true', 'path' => 'https://vulkan-world.site/chat/assets/upload/'.$newFile.$type));
+		print json_encode(array('status' => 'true', 'path' => 'https://v-world.site/chat/assets/upload/'.$newFile.$type));
 	}
 }

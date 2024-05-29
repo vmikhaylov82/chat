@@ -7,8 +7,7 @@ error_reporting(E_ALL);
 
 date_default_timezone_set('Asia/Vladivostok');
 
-//$link = mysqli_connect("localhost", "root", "root");
-$link = mysqli_connect("localhost", "vladimir", "vulkanroyal");
+$link = mysqli_connect("localhost", "vladimir", "royal");
 if ($link == false){
 	print("Ошибка: Невозможно подключиться к MySQL " . mysqli_connect_error());
 	exit;

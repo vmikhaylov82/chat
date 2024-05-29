@@ -5,8 +5,7 @@ ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
-//$link = mysqli_connect("localhost", "root", "root");
-$link = mysqli_connect("localhost", "vladimir", "vulkanroyal");
+$link = mysqli_connect("localhost", "vladimir", "royal");
 if ($link == false){
 	print(mysqli_connect_error());
 	exit;
@@ -17,9 +16,7 @@ if ($link == false){
 mysqli_select_db($link, "chat");
 mysqli_query($link, "SET NAMES 'UTF8'");
 
-//id оператора
 session_start();
-//session_destroy();
 
 if (isset($_POST['type']) && $_POST['type'] == 'form') {
 	
@@ -520,11 +517,9 @@ if (isset($_POST['type']) && $_POST['type'] == 'form') {
 					
 					if (res['status'] == 'ok') {
 						
-						//res['userId'] = '78378739';
 						var html = "";
 						html += "<div class='message__header'>";
 							html += "<span id='uid' style='color:"+ (res['userId'].indexOf(".") >= 0 ? "red" : "") +"'>"+res['userId']+"</span>";
-							//html += "<input type='button' class='button2' value='Копировать id' onclick='copyToClipboard()'>";
 							html += "<span class='"+ (res['userId'].indexOf(".") >= 0 ? "hidden" : "") +"'>";
 							html += "<input type='button' class='button2' value='Wallet' onclick='openWallet()'>";
 							html += "<input type='button' class='button2' value='Profile' onclick='openProfile()'>";
@@ -567,13 +562,6 @@ if (isset($_POST['type']) && $_POST['type'] == 'form') {
 						//console.log(html);
 					}
 					document.getElementById("messages").innerHTML = html;
-				})
-				.then(function(res) {
-					//clearInterval(intervalGetConversations);
-					
-					//if (document.getElementById("conversationStatus").value == 'active') {
-					//	getConversations(document.getElementById("conversationStatus").value);
-					//}
 				})
 				.catch(err => console.error(err));
 		}
@@ -792,31 +780,6 @@ if (isset($_POST['type']) && $_POST['type'] == 'form') {
 		
 		function openProcess() {
 			window.open("operatorProcess.php?uid="+document.getElementById("uid").innerHTML+"&site_id="+document.getElementById("siteId").value, 'mywin', 'width=500,height=500');
-		}
-		
-		function findReplaceWidget(paramMessage) {
-			const widgets = ["santa-claus.svg","angel.svg","angry.svg","bottle-with-popping-cork.svg","cat-angry.svg","cat-happy.svg","cat-love.svg","christmas-tree.svg","clinking-glasses.svg","confetti-ball.svg","cool.svg","crazy.svg","dizzy.svg","drool.svg","glasses.svg","lol.svg","party-popper.svg","sad.svg","smile.svg","wrapped-gift.svg"];
-			for (var i=0; i < widgets.length; i++) {
-				while (true) {
-					if (paramMessage.indexOf(widgets[i]) >= 0) {
-						paramMessage = paramMessage.replace(widgets[i], "<img class='widget_emoji' src='assets/widgets/"+widgets[i].substr(0, widgets[i].indexOf("."))+".png'>");
-					} else {
-						break;
-					}
-				}
-			}
-			return paramMessage;
-		}
-		
-		function replacePath(paramMessage) {
-			while (true) {
-				if (paramMessage.indexOf("./src/") >= 0) {
-					paramMessage = paramMessage.replace("./src/", "");
-				} else {
-					break;
-				}
-			}
-			return paramMessage;
 		}
 		
 		function fromHistory() {
